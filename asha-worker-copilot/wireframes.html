@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASHA Worker Copilot — Wireframes</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f0f2f5;
+            color: #1a1a2e;
+            padding: 40px 20px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: #1a1a2e;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 40px;
+        }
+        .screens {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+        }
+        .screen-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .screen-label {
+            font-weight: 700;
+            font-size: 14px;
+            color: #444;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Phone Frame */
+        .phone {
+            width: 320px;
+            height: 640px;
+            background: #fff;
+            border-radius: 36px;
+            border: 3px solid #222;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(0,0,0,0.05);
+        }
+        .phone::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 6px;
+            background: #222;
+            border-radius: 3px;
+            z-index: 10;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            height: 32px;
+            background: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #333;
+            padding-top: 10px;
+        }
+        .status-bar .time { font-weight: 700; }
+        .status-icons { display: flex; gap: 4px; align-items: center; }
+        .status-icons span { font-size: 10px; }
+
+        /* App Header */
+        .app-header {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .app-header.green { background: #16a34a; color: #fff; }
+        .app-header.blue { background: #2563eb; color: #fff; }
+        .app-header.dark { background: #1e293b; color: #fff; }
+        .app-header.red { background: #dc2626; color: #fff; }
+        .app-header.teal { background: #0d9488; color: #fff; }
+        .app-header .back { font-size: 18px; cursor: pointer; }
+        .app-header h2 { font-size: 16px; font-weight: 700; }
+        .app-header .logo-icon {
+            width: 28px; height: 28px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px;
+        }
+
+        .screen-body {
+            padding: 16px 20px;
+            overflow-y: auto;
+            height: calc(100% - 80px);
+        }
+
+        /* === SCREEN 1: HOME === */
+        .welcome-card {
+            background: linear-gradient(135deg, #16a34a, #15803d);
+            border-radius: 14px;
+            padding: 16px;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+        .welcome-card .greeting {
+            font-size: 13px;
+            opacity: 0.85;
+        }
+        .welcome-card .name {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 2px 0;
+        }
+        .welcome-card .area {
+            font-size: 11px;
+            opacity: 0.7;
+        }
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 11px;
+            margin-top: 8px;
+        }
+        .status-dot {
+            width: 7px; height: 7px;
+            background: #4ade80;
+            border-radius: 50%;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .action-card {
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 16px 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .action-card:hover { border-color: #16a34a; background: #f0fdf4; }
+        .action-card .icon {
+            width: 40px; height: 40px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 8px;
+            font-size: 18px;
+        }
+        .action-card .icon.green { background: #dcfce7; color: #16a34a; }
+        .action-card .icon.blue { background: #dbeafe; color: #2563eb; }
+        .action-card .icon.purple { background: #f3e8ff; color: #7c3aed; }
+        .action-card .icon.orange { background: #fff7ed; color: #ea580c; }
+        .action-card .label { font-size: 12px; font-weight: 600; color: #334155; }
+        .action-card .count { font-size: 10px; color: #94a3b8; margin-top: 2px; }
+
+        .summary-bar {
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-around;
+        }
+        .summary-item { text-align: center; }
+        .summary-item .num { font-size: 20px; font-weight: 800; color: #16a34a; }
+        .summary-item .lbl { font-size: 10px; color: #64748b; }
+
+        /* === SCREEN 2: VOICE ASSESSMENT === */
+        .patient-bar {
+            background: #f1f5f9;
+            border-radius: 10px;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        .patient-bar .pname { font-size: 13px; font-weight: 700; }
+        .patient-bar .ptype { font-size: 11px; color: #64748b; }
+        .patient-bar .badge {
+            font-size: 10px;
+            background: #dbeafe;
+            color: #2563eb;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .chat-area { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+        .chat-bubble {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 14px;
+            font-size: 12.5px;
+            line-height: 1.5;
+        }
+        .chat-bubble.ai {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+        .chat-bubble.ai .sender { font-size: 10px; font-weight: 700; color: #2563eb; margin-bottom: 3px; }
+        .chat-bubble.user {
+            background: #16a34a;
+            color: #fff;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-bubble.user .sender { font-size: 10px; font-weight: 700; opacity: 0.8; margin-bottom: 3px; }
+
+        .progress-section {
+            margin-bottom: 14px;
+        }
+        .progress-label {
+            font-size: 11px;
+            color: #64748b;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+        .progress-bar {
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, #16a34a, #22c55e);
+        }
+
+        .speak-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .mic-icon {
+            width: 24px; height: 24px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px;
+        }
+
+        .bottom-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .btn-secondary {
+            flex: 1;
+            padding: 10px;
+            border: 1.5px solid #e2e8f0;
+            background: #fff;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        /* === SCREEN 3: RISK RESULT === */
+        .result-badge {
+            text-align: center;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 16px;
+        }
+        .result-badge.high {
+            background: linear-gradient(135deg, #fef2f2, #fee2e2);
+            border: 2px solid #fca5a5;
+        }
+        .result-badge .risk-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #dc2626;
+            margin-bottom: 4px;
+        }
+        .result-badge .risk-level {
+            font-size: 28px;
+            font-weight: 900;
+            color: #dc2626;
+        }
+        .result-badge .risk-score {
+            font-size: 12px;
+            color: #991b1b;
+            margin-top: 4px;
+        }
+
+        .risk-factors {
+            background: #fff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 14px;
+        }
+        .risk-factors h4 {
+            font-size: 12px;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 8px;
+        }
+        .risk-factor-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 0;
+            font-size: 12px;
+            color: #475569;
+        }
+        .risk-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: #ef4444;
+            flex-shrink: 0;
+        }
+        .risk-dot.medium { background: #f59e0b; }
+
+        .recommendations {
+            background: #f0fdf4;
+            border: 1.5px solid #bbf7d0;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 14px;
+        }
+        .recommendations h4 {
+            font-size: 12px;
+            font-weight: 700;
+            color: #166534;
+            margin-bottom: 8px;
+        }
+        .rec-item {
+            font-size: 11.5px;
+            color: #15803d;
+            padding: 3px 0;
+            padding-left: 12px;
+            position: relative;
+        }
+        .rec-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 9px;
+            width: 4px; height: 4px;
+            background: #16a34a;
+            border-radius: 50%;
+        }
+        .guideline-ref {
+            font-size: 10px;
+            color: #64748b;
+            font-style: italic;
+            margin-top: 6px;
+        }
+
+        .result-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .btn-primary {
+            padding: 12px;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+        }
+        .btn-outline {
+            padding: 10px;
+            background: #fff;
+            color: #334155;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        /* === SCREEN 4: VACCINATION === */
+        .vacc-patient {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .vacc-avatar {
+            width: 40px; height: 40px;
+            background: #dbeafe;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; font-weight: 700; color: #2563eb;
+        }
+        .vacc-info .vname { font-size: 14px; font-weight: 700; }
+        .vacc-info .vage { font-size: 11px; color: #64748b; }
+
+        .vacc-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+        .vacc-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+        .vacc-item.done { background: #f0fdf4; border: 1px solid #bbf7d0; }
+        .vacc-item.upcoming { background: #fffbeb; border: 1px solid #fde68a; }
+        .vacc-item.pending { background: #f8fafc; border: 1px solid #e2e8f0; }
+        .vacc-check {
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: 700;
+            flex-shrink: 0;
+        }
+        .vacc-check.done { background: #16a34a; color: #fff; }
+        .vacc-check.upcoming { background: #f59e0b; color: #fff; }
+        .vacc-check.pending { background: #cbd5e1; color: #fff; }
+        .vacc-details { flex: 1; }
+        .vacc-details .vac-name { font-weight: 600; color: #1e293b; }
+        .vacc-details .vac-date { font-size: 10px; color: #64748b; margin-top: 1px; }
+        .vacc-tag {
+            font-size: 9px;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+        .vacc-tag.done { background: #dcfce7; color: #16a34a; }
+        .vacc-tag.soon { background: #fef3c7; color: #d97706; }
+
+        .vacc-summary {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .vacc-stat {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1.5px solid #e2e8f0;
+        }
+        .vacc-stat .vs-num { font-size: 18px; font-weight: 800; }
+        .vacc-stat .vs-lbl { font-size: 10px; color: #64748b; }
+        .vacc-stat.green .vs-num { color: #16a34a; }
+        .vacc-stat.yellow .vs-num { color: #d97706; }
+        .vacc-stat.red .vs-num { color: #dc2626; }
+
+        .btn-record {
+            width: 100%;
+            padding: 12px;
+            background: #0d9488;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* === SCREEN 5: EMERGENCY === */
+        .emergency-screen .screen-body {
+            background: #fef2f2;
+        }
+        .emergency-banner {
+            background: #dc2626;
+            color: #fff;
+            text-align: center;
+            padding: 16px;
+            border-radius: 14px;
+            margin-bottom: 14px;
+        }
+        .emergency-banner .e-title {
+            font-size: 18px;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+        .emergency-banner .e-symptom {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+        .emergency-banner .e-patient {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-top: 2px;
+        }
+
+        .emergency-steps {
+            background: #fff;
+            border: 2px solid #fca5a5;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+        .emergency-steps h4 {
+            font-size: 12px;
+            font-weight: 700;
+            color: #991b1b;
+            margin-bottom: 10px;
+        }
+        .e-step {
+            display: flex;
+            gap: 10px;
+            padding: 6px 0;
+            font-size: 12px;
+            color: #1e293b;
+        }
+        .e-step-num {
+            width: 22px; height: 22px;
+            background: #dc2626;
+            color: #fff;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px; font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .facility-card {
+            background: #fff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+        .facility-card h4 {
+            font-size: 12px;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 8px;
+        }
+        .facility-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11.5px;
+            padding: 3px 0;
+        }
+        .facility-row .fl { color: #64748b; }
+        .facility-row .fv { font-weight: 600; color: #1e293b; }
+
+        .btn-emergency {
+            width: 100%;
+            padding: 16px;
+            background: #dc2626;
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 900;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .btn-emergency-secondary {
+            width: 100%;
+            padding: 10px;
+            background: #fff;
+            color: #dc2626;
+            border: 2px solid #dc2626;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 56px;
+            background: #fff;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .nav-item {
+            text-align: center;
+            font-size: 9px;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+        .nav-item.active { color: #16a34a; }
+        .nav-icon {
+            width: 24px; height: 24px;
+            margin: 0 auto 2px;
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px;
+        }
+        .nav-item.active .nav-icon { background: #dcfce7; }
+
+        @media print {
+            body { background: #fff; }
+            .screens { gap: 20px; }
+            .phone { box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+        }
+    </style>
+</head>
+<body>
+
+<h1>ASHA Worker Copilot</h1>
+<p class="subtitle">Mobile App Wireframes — 5 Key Screens</p>
+
+<div class="screens">
+
+    <!-- ========== SCREEN 1: HOME DASHBOARD ========== -->
+    <div class="screen-wrapper">
+        <div class="screen-label">Screen 1 — Home Dashboard</div>
+        <div class="phone">
+            <div class="status-bar">
+                <span class="time">15:42</span>
+                <div class="status-icons">
+                    <span>4G</span>
+                    <span>&#9679;&#9679;&#9679;&#9675;</span>
+                </div>
+            </div>
+            <div class="app-header green">
+                <div class="logo-icon">+</div>
+                <h2>ASHA Worker Copilot</h2>
+            </div>
+            <div class="screen-body" style="height: calc(100% - 88px - 56px);">
+                <div class="welcome-card">
+                    <div class="greeting">Namaste,</div>
+                    <div class="name">Sunita Devi</div>
+                    <div class="area">Gram Panchayat Raipur, Block Sadar</div>
+                    <div class="status-pill">
+                        <div class="status-dot"></div>
+                        Online
+                    </div>
+                </div>
+
+                <div class="action-grid">
+                    <div class="action-card">
+                        <div class="icon green">&#9737;</div>
+                        <div class="label">Start Assessment</div>
+                        <div class="count">Voice-guided</div>
+                    </div>
+                    <div class="action-card">
+                        <div class="icon blue">&#9201;</div>
+                        <div class="label">Vaccine Reminders</div>
+                        <div class="count">3 upcoming</div>
+                    </div>
+                    <div class="action-card">
+                        <div class="icon purple">&#9823;</div>
+                        <div class="label">My Patients</div>
+                        <div class="count">142 assigned</div>
+                    </div>
+                    <div class="action-card">
+                        <div class="icon orange">&#9776;</div>
+                        <div class="label">Today's Summary</div>
+                        <div class="count">5 visits done</div>
+                    </div>
+                </div>
+
+                <div class="summary-bar">
+                    <div class="summary-item">
+                        <div class="num">8</div>
+                        <div class="lbl">Assessments Today</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="num">3</div>
+                        <div class="lbl">Vaccines Due</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="num">1</div>
+                        <div class="lbl">High Risk</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-nav">
+                <div class="nav-item active"><div class="nav-icon">&#8962;</div>Home</div>
+                <div class="nav-item"><div class="nav-icon">&#9737;</div>Assess</div>
+                <div class="nav-item"><div class="nav-icon">&#9823;</div>Patients</div>
+                <div class="nav-item"><div class="nav-icon">&#9881;</div>Settings</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SCREEN 2: VOICE ASSESSMENT ========== -->
+    <div class="screen-wrapper">
+        <div class="screen-label">Screen 2 — Voice Assessment</div>
+        <div class="phone">
+            <div class="status-bar">
+                <span class="time">15:45</span>
+                <div class="status-icons">
+                    <span>4G</span>
+                    <span>&#9679;&#9679;&#9679;&#9675;</span>
+                </div>
+            </div>
+            <div class="app-header blue">
+                <span class="back">&larr;</span>
+                <h2>Health Assessment</h2>
+            </div>
+            <div class="screen-body" style="height: calc(100% - 88px);">
+                <div class="patient-bar">
+                    <div>
+                        <div class="pname">Meera Bai (Age 28)</div>
+                        <div class="ptype">Maternal Health Check</div>
+                    </div>
+                    <div class="badge">Q3 / 10</div>
+                </div>
+
+                <div class="chat-area">
+                    <div class="chat-bubble ai">
+                        <div class="sender">AI Assistant</div>
+                        Meera ji ka blood pressure kitna hai aaj?
+                    </div>
+                    <div class="chat-bubble user">
+                        <div class="sender">You</div>
+                        BP 140/90 hai, doctor sahab ne bataya
+                    </div>
+                    <div class="chat-bubble ai">
+                        <div class="sender">AI Assistant</div>
+                        Unka hemoglobin level kya tha pichli baar?
+                    </div>
+                </div>
+
+                <div class="progress-section">
+                    <div class="progress-label">Question 3 of 10</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 30%;"></div>
+                    </div>
+                </div>
+
+                <button class="speak-btn">
+                    <div class="mic-icon">&#9679;</div>
+                    Hold to Speak
+                </button>
+
+                <div class="bottom-actions">
+                    <button class="btn-secondary">Skip Question</button>
+                    <button class="btn-secondary">End Assessment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SCREEN 3: RISK RESULT ========== -->
+    <div class="screen-wrapper">
+        <div class="screen-label">Screen 3 — Risk Assessment Result</div>
+        <div class="phone">
+            <div class="status-bar">
+                <span class="time">15:52</span>
+                <div class="status-icons">
+                    <span>4G</span>
+                    <span>&#9679;&#9679;&#9679;&#9675;</span>
+                </div>
+            </div>
+            <div class="app-header dark">
+                <span class="back">&larr;</span>
+                <h2>Assessment Complete</h2>
+            </div>
+            <div class="screen-body" style="height: calc(100% - 88px);">
+                <div class="patient-bar" style="margin-bottom: 12px;">
+                    <div>
+                        <div class="pname">Meera Bai</div>
+                        <div class="ptype">Maternal Health Assessment</div>
+                    </div>
+                </div>
+
+                <div class="result-badge high">
+                    <div class="risk-label">Risk Level</div>
+                    <div class="risk-level">HIGH</div>
+                    <div class="risk-score">Maternal Risk Score: 72 / 100</div>
+                </div>
+
+                <div class="risk-factors">
+                    <h4>Identified Risk Factors</h4>
+                    <div class="risk-factor-item"><div class="risk-dot"></div>Elevated BP — 140/90 mmHg</div>
+                    <div class="risk-factor-item"><div class="risk-dot"></div>Low hemoglobin — 9.2 g/dL</div>
+                    <div class="risk-factor-item"><div class="risk-dot medium"></div>Age &gt; 30 with first pregnancy</div>
+                </div>
+
+                <div class="recommendations">
+                    <h4>Recommendations</h4>
+                    <div class="rec-item">Refer to PHC within 48 hours</div>
+                    <div class="rec-item">Monitor BP daily</div>
+                    <div class="rec-item">Iron + folic acid supplementation</div>
+                    <div class="guideline-ref">Ref: ICMR Guideline GL-MAT-017</div>
+                </div>
+
+                <div class="result-actions">
+                    <button class="btn-primary">Listen to Summary</button>
+                    <button class="btn-outline">Share with ANM</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SCREEN 4: VACCINATION TRACKER ========== -->
+    <div class="screen-wrapper">
+        <div class="screen-label">Screen 4 — Vaccination Tracker</div>
+        <div class="phone">
+            <div class="status-bar">
+                <span class="time">16:05</span>
+                <div class="status-icons">
+                    <span>4G</span>
+                    <span>&#9679;&#9679;&#9679;&#9675;</span>
+                </div>
+            </div>
+            <div class="app-header teal">
+                <span class="back">&larr;</span>
+                <h2>Vaccination Tracker</h2>
+            </div>
+            <div class="screen-body" style="height: calc(100% - 88px);">
+                <div class="vacc-patient">
+                    <div class="vacc-avatar">R</div>
+                    <div class="vacc-info">
+                        <div class="vname">Baby Riya</div>
+                        <div class="vage">8 months old &middot; DOB: 12 Jun 2025</div>
+                    </div>
+                </div>
+
+                <div class="vacc-summary">
+                    <div class="vacc-stat green">
+                        <div class="vs-num">5</div>
+                        <div class="vs-lbl">Completed</div>
+                    </div>
+                    <div class="vacc-stat yellow">
+                        <div class="vs-num">1</div>
+                        <div class="vs-lbl">Upcoming</div>
+                    </div>
+                    <div class="vacc-stat red">
+                        <div class="vs-num">0</div>
+                        <div class="vs-lbl">Overdue</div>
+                    </div>
+                </div>
+
+                <div class="vacc-list">
+                    <div class="vacc-item done">
+                        <div class="vacc-check done">&#10003;</div>
+                        <div class="vacc-details">
+                            <div class="vac-name">BCG</div>
+                            <div class="vac-date">12 Jun 2025</div>
+                        </div>
+                        <div class="vacc-tag done">DONE</div>
+                    </div>
+                    <div class="vacc-item done">
+                        <div class="vacc-check done">&#10003;</div>
+                        <div class="vacc-details">
+                            <div class="vac-name">OPV-0</div>
+                            <div class="vac-date">12 Jun 2025</div>
+                        </div>
+                        <div class="vacc-tag done">DONE</div>
+                    </div>
+                    <div class="vacc-item done">
+                        <div class="vacc-check done">&#10003;</div>
+                        <div class="vacc-details">
+                            <div class="vac-name">Pentavalent-1</div>
+                            <div class="vac-date">12 Aug 2025</div>
+                        </div>
+                        <div class="vacc-tag done">DONE</div>
+                    </div>
+                    <div class="vacc-item upcoming">
+                        <div class="vacc-check upcoming">!</div>
+                        <div class="vacc-details">
+                            <div class="vac-name">Pentavalent-2</div>
+                            <div class="vac-date">Due: 20 Feb 2026</div>
+                        </div>
+                        <div class="vacc-tag soon">IN 5 DAYS</div>
+                    </div>
+                    <div class="vacc-item pending">
+                        <div class="vacc-check pending">&mdash;</div>
+                        <div class="vacc-details">
+                            <div class="vac-name">Measles-1</div>
+                            <div class="vac-date">Due: 12 Mar 2026</div>
+                        </div>
+                    </div>
+                    <div class="vacc-item pending">
+                        <div class="vacc-check pending">&mdash;</div>
+                        <div class="vacc-details">
+                            <div class="vac-name">Vitamin A — 1st Dose</div>
+                            <div class="vac-date">Due: 12 Jun 2026</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-record">Record Vaccination</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SCREEN 5: EMERGENCY ALERT ========== -->
+    <div class="screen-wrapper">
+        <div class="screen-label">Screen 5 — Emergency Alert</div>
+        <div class="phone emergency-screen">
+            <div class="status-bar" style="background: #fef2f2;">
+                <span class="time">16:18</span>
+                <div class="status-icons">
+                    <span>4G</span>
+                    <span>&#9679;&#9679;&#9679;&#9675;</span>
+                </div>
+            </div>
+            <div class="app-header red">
+                <h2>EMERGENCY DETECTED</h2>
+            </div>
+            <div class="screen-body" style="background: #fef2f2; height: calc(100% - 88px);">
+                <div class="emergency-banner">
+                    <div class="e-title">SEVERE BLEEDING</div>
+                    <div class="e-patient">Patient: Kamla Devi (Age 32)</div>
+                    <div class="e-symptom">Immediate medical attention required</div>
+                </div>
+
+                <div class="emergency-steps">
+                    <h4>IMMEDIATE ACTIONS</h4>
+                    <div class="e-step">
+                        <div class="e-step-num">1</div>
+                        <div>Keep patient lying down on her back</div>
+                    </div>
+                    <div class="e-step">
+                        <div class="e-step-num">2</div>
+                        <div>Elevate legs above heart level</div>
+                    </div>
+                    <div class="e-step">
+                        <div class="e-step-num">3</div>
+                        <div>Do NOT give food or water</div>
+                    </div>
+                    <div class="e-step">
+                        <div class="e-step-num">4</div>
+                        <div>Call 108 / 102 IMMEDIATELY</div>
+                    </div>
+                </div>
+
+                <div class="facility-card">
+                    <h4>Nearest Emergency Facility</h4>
+                    <div class="facility-row"><span class="fl">Name</span><span class="fv">District Hospital, Raipur</span></div>
+                    <div class="facility-row"><span class="fl">Phone</span><span class="fv">0771-2XXXXXX</span></div>
+                    <div class="facility-row"><span class="fl">Distance</span><span class="fv">12 km — ~25 min</span></div>
+                </div>
+
+                <button class="btn-emergency">CALL 108 NOW</button>
+                <button class="btn-emergency-secondary">Log Event & Continue</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
