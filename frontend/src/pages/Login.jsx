@@ -36,8 +36,9 @@ export default function Login() {
     e.preventDefault();
     setError(''); setLoading(true);
     try {
+      // Cognito uses email as the username
       await api.auth.register({
-        username: form.username, password: form.password,
+        username: form.email, password: form.password,
         email: form.email, name: form.name, area: form.area,
       });
       setSuccess('Registration successful! Check your email for the verification code.');
@@ -53,7 +54,7 @@ export default function Login() {
     e.preventDefault();
     setError(''); setLoading(true);
     try {
-      await api.auth.confirm(form.username, form.code);
+      await api.auth.confirm(form.email, form.code);
       setSuccess('Account verified! You can now log in.');
       setMode('login');
     } catch (err) {
@@ -79,8 +80,8 @@ export default function Login() {
         {mode === 'login' && (
           <form onSubmit={handleLogin}>
             <div className="form-group">
-              <label className="form-label">Username</label>
-              <input className="form-input" placeholder="Your username" required
+              <label className="form-label">Email</label>
+              <input className="form-input" type="email" placeholder="your@email.com" required
                 value={form.username} onChange={e => update('username', e.target.value)} />
             </div>
             <div className="form-group">
@@ -102,17 +103,10 @@ export default function Login() {
         {/* REGISTER */}
         {mode === 'register' && (
           <form onSubmit={handleRegister}>
-            <div className="grid-2">
-              <div className="form-group">
-                <label className="form-label">Full Name</label>
-                <input className="form-input" placeholder="Sunita Devi" required
-                  value={form.name} onChange={e => update('name', e.target.value)} />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Username</label>
-                <input className="form-input" placeholder="sunita_devi" required
-                  value={form.username} onChange={e => update('username', e.target.value)} />
-              </div>
+            <div className="form-group">
+              <label className="form-label">Full Name</label>
+              <input className="form-input" placeholder="Sunita Devi" required
+                value={form.name} onChange={e => update('name', e.target.value)} />
             </div>
             <div className="form-group">
               <label className="form-label">Email</label>
