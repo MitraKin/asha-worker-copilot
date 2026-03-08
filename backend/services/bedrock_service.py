@@ -1,5 +1,5 @@
 """
-Amazon Bedrock service — Claude LLM for medical assessments and RAG retrieval.
+Amazon Bedrock service — LLM for medical assessments and RAG retrieval.
 """
 import json
 import boto3
@@ -7,6 +7,7 @@ import logging
 import os
 from pathlib import Path
 from typing import Optional, Dict, Any
+from botocore.exceptions import ClientError
 
 from config import get_settings
 from prompts.assessment_prompt import (
@@ -17,6 +18,11 @@ from prompts.assessment_prompt import (
 
 logger = logging.getLogger(__name__)
 settings = get_settings()
+
+
+class BedrockThrottlingError(Exception):
+    """Raised when Bedrock returns a throttling/quota error."""
+    pass
 
 # Load medical guidelines from local JSON files (no OpenSearch needed for prototype)
 GUIDELINES_DIR = Path(__file__).parent.parent / "knowledge_base" / "guidelines"
@@ -78,17 +84,27 @@ def _invoke_model(system_prompt: str, messages: list, max_tokens: int = 1024) ->
     """Call Amazon Nova Pro via Bedrock Converse API and return the response text."""
     client = _get_bedrock_client()
 
-    response = client.converse(
-        modelId=settings.bedrock_model_id,
-        system=[{"text": system_prompt}],
-        messages=messages,
-        inferenceConfig={
-            "maxTokens": max_tokens,
-            "temperature": 0.3,   # Low temp for consistent medical outputs
-            "topP": 0.9,
-        },
-    )
-    return response["output"]["message"]["content"][0]["text"]
+    try:
+        response = client.converse(
+            modelId=settings.bedrock_model_id,
+            system=[{"text": system_prompt}],
+            messages=messages,
+            inferenceConfig={
+                "maxTokens": max_tokens,
+                "temperature": 0.3,
+                "topP": 0.9,
+            },
+        )
+        return response["output"]["message"]["content"][0]["text"]
+    except ClientError as e:
+        error_code = e.response["Error"]["Code"]
+        if error_code in ("ThrottlingException", "TooManyRequestsException", "ServiceQuotaExceededException"):
+            logger.warning(f"Bedrock throttled: {e}")
+            raise BedrockThrottlingError(
+                "Daily usage limit reached for AI service. Please try again later or contact your administrator."
+            ) from e
+        logger.error(f"Bedrock ClientError: {e}")
+        raise
 
 
 def retrieve_guidelines_from_rag(query: str, num_results: int = 5) -> str:
