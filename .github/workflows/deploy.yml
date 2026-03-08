@@ -17,6 +17,8 @@ jobs:
           script: |
             cd /opt/asha-copilot
             git pull origin master
+            # Ensure correct model ID in .env
+            sed -i 's|BEDROCK_MODEL_ID=.*|BEDROCK_MODEL_ID=amazon.nova-pro-v1:0|' backend/.env
             python3.11 -m pip install -r backend/requirements.txt --quiet
             cd frontend && npm ci && npm run build
             sudo systemctl restart asha-backend
