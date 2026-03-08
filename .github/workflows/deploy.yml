@@ -17,8 +17,8 @@ jobs:
           script: |
             cd /opt/asha-copilot
             git pull origin master
-            cd backend && source venv/bin/activate && pip install -r requirements.txt
-            cd ../frontend && npm ci && npm run build
+            python3.11 -m pip install -r backend/requirements.txt --quiet
+            cd frontend && npm ci && npm run build
             sudo systemctl restart asha-backend
             sudo systemctl restart nginx
             echo "Deployed at $(date)"
