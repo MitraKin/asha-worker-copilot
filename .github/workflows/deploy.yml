@@ -1,0 +1,24 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /opt/asha-copilot
+            git pull origin master
+            cd backend && source venv/bin/activate && pip install -r requirements.txt
+            cd ../frontend && npm ci && npm run build
+            sudo systemctl restart asha-backend
+            sudo systemctl restart nginx
+            echo "Deployed at $(date)"

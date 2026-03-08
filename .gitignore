@@ -20,6 +20,10 @@ uv.lock
 node_modules/
 frontend/dist/
 
+# Deployment artifacts
+deploy/deployment-info.json
+*.pem
+
 # OS
 .DS_Store
 Thumbs.db
