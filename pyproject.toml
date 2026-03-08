@@ -1,0 +1,22 @@
+[project]
+name = "asha-worker-copilot"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "boto3==1.37.10",
+    "botocore==1.37.10",
+    "fastapi==0.115.6",
+    "gunicorn==23.0.0",
+    "httpx==0.28.1",
+    "moto[cognitoidp,dynamodb,s3]==5.0.27",
+    "pydantic==2.10.4",
+    "pydantic-settings==2.7.0",
+    "pytest==8.3.4",
+    "pytest-asyncio==0.25.3",
+    "python-dotenv==1.0.1",
+    "python-jose[cryptography]==3.3.0",
+    "python-multipart==0.0.20",
+    "uvicorn[standard]==0.34.0",
+]

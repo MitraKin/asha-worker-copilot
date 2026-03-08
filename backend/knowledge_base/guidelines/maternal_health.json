@@ -1,0 +1,79 @@
+{
+  "topic": "Maternal Health — High-Risk Pregnancy Guidelines",
+  "source": "ICMR & Ministry of Health and Family Welfare, Government of India",
+  "version": "2023",
+  "guidelines": [
+    {
+      "id": "ICMR-MAT-001",
+      "category": "Blood Pressure",
+      "condition": "Gestational Hypertension",
+      "definition": "BP ≥ 140/90 mmHg after 20 weeks of gestation without proteinuria",
+      "risk_level": "high",
+      "action": "Refer to PHC/CHC within 48 hours. Monitor BP every 4 hours. Start antihypertensives if BP ≥ 150/100.",
+      "asha_action": "Measure BP, record in MCP card, refer to ANM/PHC immediately"
+    },
+    {
+      "id": "ICMR-MAT-002",
+      "category": "Blood Pressure",
+      "condition": "Severe Preeclampsia",
+      "definition": "BP ≥ 160/110 mmHg with proteinuria (≥2+ on dipstick)",
+      "risk_level": "critical",
+      "action": "EMERGENCY — hospital admission required immediately. Administer MgSO4 if available. Call 108.",
+      "asha_action": "Call 108 immediately. Keep patient lying on left side. Do NOT leave patient alone."
+    },
+    {
+      "id": "ICMR-MAT-003",
+      "category": "Anemia",
+      "condition": "Severe Anemia in Pregnancy",
+      "definition": "Hemoglobin < 7.0 g/dL",
+      "risk_level": "high",
+      "action": "Refer to FRU/district hospital for blood transfusion. Daily IFA tablets. Dietary counseling.",
+      "asha_action": "Ensure patient is taking IFA. Refer to PHC urgently. Provide nutritional counseling about iron-rich foods."
+    },
+    {
+      "id": "ICMR-MAT-004",
+      "category": "Anemia",
+      "condition": "Moderate Anemia in Pregnancy",
+      "definition": "Hemoglobin 7.0–10.0 g/dL",
+      "risk_level": "medium",
+      "action": "Double dose of IFA (200mg elemental iron daily). Dietary counseling. Follow up in 4 weeks.",
+      "asha_action": "Ensure IFA compliance. Motivate for iron-rich diet. Check at next home visit."
+    },
+    {
+      "id": "ICMR-MAT-005",
+      "category": "Age Risk",
+      "condition": "Teenage Pregnancy",
+      "definition": "Pregnancy in women < 18 years of age",
+      "risk_level": "high",
+      "action": "Register as high-risk pregnancy. Increase ANC visits to monthly. Nutritional support. Counseling.",
+      "asha_action": "Accompany to all ANC visits. Ensure family support. Screen for domestic violence."
+    },
+    {
+      "id": "ICMR-MAT-006",
+      "category": "Bleeding",
+      "condition": "Antepartum Hemorrhage",
+      "definition": "Any bleeding from vagina after 28 weeks of pregnancy",
+      "risk_level": "critical",
+      "action": "EMERGENCY — Rush to FRU/district hospital immediately. IV access, blood group. Do NOT perform vaginal examination.",
+      "asha_action": "Call 108 immediately. Patient should not walk. Reassure and accompany to hospital."
+    },
+    {
+      "id": "ICMR-MAT-007",
+      "category": "Danger Signs",
+      "condition": "Eclampsia (Seizures in Pregnancy)",
+      "definition": "Convulsions in a pregnant/postpartum woman",
+      "risk_level": "critical",
+      "action": "EMERGENCY — Protect airway, left lateral position. MgSO4 injection. Rapid transport to hospital.",
+      "asha_action": "DO NOT put anything in mouth. Position on left side. Call 108. Send to hospital immediately."
+    },
+    {
+      "id": "ICMR-MAT-008",
+      "category": "Nutrition",
+      "condition": "Low BMI / Malnutrition",
+      "definition": "Pre-pregnancy BMI < 18.5 or weight gain < 9 kg by term",
+      "risk_level": "medium",
+      "action": "Nutrition counseling. Enroll in PMMVY scheme. Refer to NRC if severely malnourished.",
+      "asha_action": "Link to Anganwadi for supplementary nutrition. Counsel on diet. Ensure PMMVY enrollment."
+    }
+  ]
+}

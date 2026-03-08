@@ -1,0 +1,128 @@
+{
+  "topic": "Emergency Protocols for ASHA Workers",
+  "source": "National Health Mission, Ministry of Health and Family Welfare, Government of India",
+  "version": "2023",
+  "emergency_helpline": "108",
+  "protocols": [
+    {
+      "id": "EMRG-001",
+      "emergency_type": "HEMORRHAGE",
+      "name": "Obstetric Hemorrhage (Excessive Bleeding)",
+      "danger_signs": [
+        "Heavy vaginal bleeding (soaking more than 1 pad per hour)",
+        "Placenta not delivered within 30 minutes of birth",
+        "Continued bleeding after delivery",
+        "Pale face, rapid pulse (shock signs)"
+      ],
+      "immediate_actions": [
+        "Call 108 IMMEDIATELY",
+        "Keep patient lying flat — raise legs if possible",
+        "Apply uterine massage if postpartum",
+        "Do NOT give anything by mouth",
+        "Keep patient warm — prevent shock",
+        "Maintain IV line if trained",
+        "Do not waste time — transport urgently to FRU"
+      ],
+      "facility_needed": "FRU/District Hospital",
+      "time_sensitivity": "MINUTES"
+    },
+    {
+      "id": "EMRG-002",
+      "emergency_type": "ECLAMPSIA",
+      "name": "Eclampsia / Seizures in Pregnancy or Postpartum",
+      "danger_signs": [
+        "Convulsions/fits in a pregnant or newly delivered woman",
+        "Severe headache not relieved by medication",
+        "Blurred vision or seeing spots",
+        "Swelling of face and hands",
+        "Epigastric pain (upper abdominal pain)"
+      ],
+      "immediate_actions": [
+        "Call 108 IMMEDIATELY",
+        "Do NOT put anything in patient's mouth",
+        "Move patient away from sharp objects",
+        "Turn patient to left side to prevent aspiration",
+        "After seizure stops — keep on left side",
+        "If MgSO4 available and trained — administer per protocol",
+        "Do NOT give oral medications during/after seizure"
+      ],
+      "facility_needed": "FRU/District Hospital with ICU",
+      "time_sensitivity": "MINUTES"
+    },
+    {
+      "id": "EMRG-003",
+      "emergency_type": "RESPIRATORY",
+      "name": "Severe Respiratory Distress",
+      "danger_signs": [
+        "Breathing rate > 60/minute in infants",
+        "Breathing rate > 30/minute in adults",
+        "Chest indrawing (skin pulls in between ribs when breathing)",
+        "Nasal flaring",
+        "Blue lips or fingernails (cyanosis)",
+        "Inability to complete sentences due to breathlessness"
+      ],
+      "immediate_actions": [
+        "Call 108 IMMEDIATELY",
+        "Sit patient upright to ease breathing",
+        "Loosen tight clothing",
+        "Keep patient calm",
+        "Do NOT give food or water",
+        "Transport urgently to hospital"
+      ],
+      "facility_needed": "District Hospital with oxygen",
+      "time_sensitivity": "MINUTES"
+    },
+    {
+      "id": "EMRG-004",
+      "emergency_type": "NEUROLOGICAL",
+      "name": "Loss of Consciousness / Altered Sensorium",
+      "danger_signs": [
+        "Unconscious — not responding to voice or touch",
+        "Confused, disoriented, not recognizing family",
+        "Sudden severe headache",
+        "Weakness of arm or leg on one side",
+        "Sudden difficulty speaking"
+      ],
+      "immediate_actions": [
+        "Call 108 IMMEDIATELY",
+        "Do NOT give anything by mouth",
+        "Recovery position (left side)",
+        "Clear airway — tilt head back, lift chin",
+        "Check breathing and pulse",
+        "Begin CPR if no pulse and not breathing (if trained)",
+        "Transport urgently"
+      ],
+      "facility_needed": "District Hospital / Medical College",
+      "time_sensitivity": "MINUTES"
+    },
+    {
+      "id": "EMRG-005",
+      "emergency_type": "SEPSIS",
+      "name": "Puerperal Sepsis (Infection After Delivery)",
+      "danger_signs": [
+        "High fever (> 38°C) within 10 days of delivery",
+        "Foul-smelling vaginal discharge",
+        "Tender, hard uterus",
+        "Rapid pulse with low blood pressure",
+        "Confusion or altered consciousness"
+      ],
+      "immediate_actions": [
+        "Call 108 IMMEDIATELY",
+        "Do NOT delay transport",
+        "Keep patient hydrated with oral fluids if conscious",
+        "Transport urgently to FRU/District Hospital",
+        "Sepsis is life-threatening — do not wait for improvement"
+      ],
+      "facility_needed": "FRU/District Hospital",
+      "time_sensitivity": "HOURS (urgent)"
+    }
+  ],
+  "general_asha_guidelines": [
+    "ALWAYS carry your ASHA kit bag including thermometer, BP apparatus, ORS packets",
+    "Keep 108 number saved in phone — share with all pregnant women in your area",
+    "Never delay transport for any obstetric emergency — load and go",
+    "Register all pregnancies within first trimester in your area",
+    "Ensure 4 ANC visits for all pregnant women",
+    "Identify and refer high-risk pregnancies to PHC/CHC"
+  ]
+}

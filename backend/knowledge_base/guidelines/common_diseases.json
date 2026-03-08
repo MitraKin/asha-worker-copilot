@@ -1,0 +1,66 @@
+{
+  "topic": "Common Diseases in Rural India — ASHA Assessment Guidelines",
+  "source": "National Health Mission, ICMR",
+  "version": "2023",
+  "diseases": [
+    {
+      "id": "COMM-001",
+      "name": "Diarrhea / Acute Gastroenteritis",
+      "hindi_name": "दस्त",
+      "symptoms": ["loose stools more than 3 times/day", "vomiting", "abdominal cramps", "dehydration"],
+      "danger_signs": ["blood in stools", "unable to drink", "sunken eyes", "no urine for 6+ hours", "continuous vomiting"],
+      "asha_action": "Give ORS. Zinc tablets for children. Continue breastfeeding. Refer if danger signs present.",
+      "risk_level_normal": "low",
+      "risk_level_danger": "high"
+    },
+    {
+      "id": "COMM-002",
+      "name": "Tuberculosis (TB)",
+      "hindi_name": "क्षय रोग / टीबी",
+      "symptoms": ["cough for more than 2 weeks", "blood in sputum", "night sweats", "significant weight loss", "fever"],
+      "asha_action": "Refer to DOTS center immediately. Collect sputum sample. Family screening required. NIKSHAY registration.",
+      "risk_level_normal": "high",
+      "risk_level_danger": "critical"
+    },
+    {
+      "id": "COMM-003",
+      "name": "Malaria",
+      "hindi_name": "मलेरिया",
+      "symptoms": ["high fever with chills", "sweating after fever", "headache", "vomiting", "body ache"],
+      "danger_signs": ["very high fever > 40°C", "seizures", "unconscious", "severe anemia", "jaundice"],
+      "asha_action": "Do Rapid Diagnostic Test (RDT). If positive — refer to PHC. Give ACT as per protocol. No chloroquine alone.",
+      "risk_level_normal": "medium",
+      "risk_level_danger": "critical"
+    },
+    {
+      "id": "COMM-004",
+      "name": "Acute Respiratory Infection (ARI) / Pneumonia",
+      "hindi_name": "निमोनिया",
+      "symptoms": ["cough", "fever", "fast breathing", "chest indrawing in children"],
+      "danger_signs": ["breathing rate > 60/min in infants", "> 50/min in young children", "chest indrawing", "unable to feed"],
+      "asha_action": "Count breathing rate. If fast breathing — refer to PHC. IMNCI protocol for children. Give cotrimoxazole if prescribed.",
+      "risk_level_normal": "medium",
+      "risk_level_danger": "high"
+    },
+    {
+      "id": "COMM-005",
+      "name": "Diabetes Mellitus",
+      "hindi_name": "मधुमेह / शुगर",
+      "symptoms": ["excessive thirst", "frequent urination", "blurred vision", "slow wound healing", "fatigue"],
+      "danger_signs": ["unconscious", "very high or very low blood sugar", "diabetic foot ulcer"],
+      "asha_action": "Screen with glucometer if available. Refer to PHC for diagnosis. Ensure medication adherence. Lifestyle counseling.",
+      "risk_level_normal": "medium",
+      "risk_level_danger": "high"
+    },
+    {
+      "id": "COMM-006",
+      "name": "Hypertension",
+      "hindi_name": "उच्च रक्तचाप / ब्लड प्रेशर",
+      "symptoms": ["headache", "dizziness", "blurred vision", "often no symptoms"],
+      "danger_signs": ["BP > 180/110", "headache with vomiting", "chest pain", "weakness of limbs"],
+      "asha_action": "Measure BP. Register in NPCDCS. Ensure medication adherence. Lifestyle modification. Monthly follow-up.",
+      "risk_level_normal": "medium",
+      "risk_level_danger": "critical"
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "topic": "Child Immunization — Universal Immunization Programme (UIP)",
+  "source": "Ministry of Health and Family Welfare, Government of India",
+  "version": "2023",
+  "schedule_type": "CHILD",
+  "guidelines": [
+    {
+      "id": "UIP-CHILD-001",
+      "vaccine": "BCG",
+      "age": "At Birth",
+      "dose": "0.1 mL intradermal (0.05 mL for neonates)",
+      "route": "Intradermal — left upper arm",
+      "contraindications": "HIV-positive infants with clinical symptoms",
+      "notes": "Protects against tuberculosis. Single dose."
+    },
+    {
+      "id": "UIP-CHILD-002",
+      "vaccine": "Hepatitis B (Birth dose)",
+      "age": "Within 24 hours of birth",
+      "dose": "0.5 mL",
+      "route": "Intramuscular — anterolateral thigh",
+      "contraindications": "None",
+      "notes": "Critical to give within 24 hours for maximum protection against perinatal transmission"
+    },
+    {
+      "id": "UIP-CHILD-003",
+      "vaccine": "Pentavalent (DTP+HepB+Hib)",
+      "age": "6 weeks, 10 weeks, 14 weeks",
+      "dose": "0.5 mL each dose",
+      "route": "Intramuscular — anterolateral thigh (alternate sides)",
+      "contraindications": "Anaphylaxis to previous dose, encephalopathy within 7 days of previous DTP",
+      "notes": "Three doses required. Common side effects: fever, pain at injection site. Give paracetamol if fever."
+    },
+    {
+      "id": "UIP-CHILD-004",
+      "vaccine": "OPV (Oral Polio Vaccine)",
+      "age": "Birth, 6 weeks, 10 weeks, 14 weeks, 16-24 months (booster)",
+      "dose": "2 drops orally",
+      "route": "Oral",
+      "contraindications": "None for tOPV",
+      "notes": "Do not feed child for 30 minutes after dose. If child vomits within 10 minutes, repeat dose."
+    },
+    {
+      "id": "UIP-CHILD-005",
+      "vaccine": "Measles-Rubella (MR)",
+      "age": "9–12 months and 16–24 months",
+      "dose": "0.5 mL",
+      "route": "Subcutaneous — right upper arm",
+      "contraindications": "Pregnancy (in mothers), severe immunodeficiency, anaphylaxis to egg protein",
+      "notes": "Two doses required. Mild fever and rash possible 5-12 days after vaccination — normal."
+    },
+    {
+      "id": "UIP-CHILD-006",
+      "vaccine": "Rotavirus",
+      "age": "6 weeks, 10 weeks, 14 weeks",
+      "dose": "5 drops orally",
+      "route": "Oral",
+      "contraindications": "Severe combined immunodeficiency, history of intussusception",
+      "notes": "Protects against severe diarrhea. Should be given before 24 weeks of age for first dose."
+    },
+    {
+      "id": "UIP-CHILD-007",
+      "vaccine": "PCV (Pneumococcal Conjugate Vaccine)",
+      "age": "6 weeks, 14 weeks, booster at 9 months",
+      "dose": "0.5 mL",
+      "route": "Intramuscular — anterolateral thigh",
+      "contraindications": "Anaphylaxis to previous dose",
+      "notes": "Protects against pneumonia and meningitis. Three-dose schedule."
+    },
+    {
+      "id": "UIP-CHILD-008",
+      "vaccine": "Vitamin A Supplementation",
+      "age": "Starting 9 months, then every 6 months until 5 years",
+      "dose": "100,000 IU at 9 months; 200,000 IU from 18 months",
+      "route": "Oral",
+      "contraindications": "None",
+      "notes": "Critical for preventing blindness and boosting immunity. Give with MR vaccine at 9 months."
+    }
+  ],
+  "asha_responsibilities": [
+    "Maintain child immunization register for all children under 5 in assigned area",
+    "Remind parents 2-3 days before due vaccination date",
+    "Accompany mother and child to immunization session",
+    "Record vaccination in mother-child protection (MCP) card",
+    "Report any adverse events following immunization (AEFI) to ANM/PHC",
+    "Identify children who have missed doses and ensure catch-up vaccination"
+  ]
+}
