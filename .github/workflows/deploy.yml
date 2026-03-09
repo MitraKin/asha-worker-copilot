@@ -17,8 +17,11 @@ jobs:
           script: |
             cd /opt/asha-copilot
             git pull origin master
-            # Ensure correct model ID in .env
+            # Ensure correct model ID and IAM credentials in .env
             sed -i 's|BEDROCK_MODEL_ID=.*|BEDROCK_MODEL_ID=amazon.nova-pro-v1:0|' backend/.env
+            sed -i 's|^AWS_ACCESS_KEY_ID=.*|AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}|' backend/.env
+            sed -i 's|^AWS_SECRET_ACCESS_KEY=.*|AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}|' backend/.env
+            sed -i 's|^AWS_SESSION_TOKEN=.*|AWS_SESSION_TOKEN=|' backend/.env
             python3.11 -m pip install -r backend/requirements.txt --quiet
             cd frontend && npm ci && npm run build
             sudo systemctl restart asha-backend
