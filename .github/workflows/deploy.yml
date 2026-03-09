@@ -22,6 +22,10 @@ jobs:
             sed -i 's|^AWS_ACCESS_KEY_ID=.*|AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}|' backend/.env
             sed -i 's|^AWS_SECRET_ACCESS_KEY=.*|AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}|' backend/.env
             sed -i 's|^AWS_SESSION_TOKEN=.*|AWS_SESSION_TOKEN=|' backend/.env
+            # Gemini config
+            grep -q '^LLM_PROVIDER=' backend/.env && sed -i 's|^LLM_PROVIDER=.*|LLM_PROVIDER=gemini|' backend/.env || echo 'LLM_PROVIDER=gemini' >> backend/.env
+            grep -q '^GEMINI_API_KEY=' backend/.env && sed -i 's|^GEMINI_API_KEY=.*|GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}|' backend/.env || echo 'GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}' >> backend/.env
+            grep -q '^GEMINI_MODEL_ID=' backend/.env && sed -i 's|^GEMINI_MODEL_ID=.*|GEMINI_MODEL_ID=gemini-2.5-flash|' backend/.env || echo 'GEMINI_MODEL_ID=gemini-2.5-flash' >> backend/.env
             python3.11 -m pip install -r backend/requirements.txt --quiet
             cd frontend && npm ci && npm run build
             sudo systemctl restart asha-backend

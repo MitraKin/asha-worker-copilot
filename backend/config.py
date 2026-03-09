@@ -19,6 +19,13 @@ class Settings(BaseSettings):
     aws_secret_access_key: str = ""
     aws_session_token: str = ""
 
+    # ── LLM Provider ─────────────────────────────────────────────────────
+    llm_provider: str = "gemini"               # "gemini" or "bedrock"
+
+    # ── Google Gemini ─────────────────────────────────────────────────────
+    gemini_api_key: str = ""
+    gemini_model_id: str = "gemini-2.5-flash"
+
     # ── Amazon Bedrock ────────────────────────────────────────────────────
     bedrock_model_id: str = "amazon.nova-pro-v1:0"
     bedrock_embedding_model_id: str = "amazon.titan-embed-text-v2:0"

@@ -1,13 +1,13 @@
 """
-Amazon Bedrock service — LLM for medical assessments and RAG retrieval.
+LLM service — Google Gemini (primary) + Amazon Bedrock (fallback).
 """
 import json
 import boto3
 import logging
-import os
 from pathlib import Path
-from typing import Optional, Dict, Any
+from typing import Dict, Any
 from botocore.exceptions import ClientError
+from google import genai
 
 from config import get_settings
 from prompts.assessment_prompt import (
@@ -24,9 +24,16 @@ class BedrockThrottlingError(Exception):
     """Raised when Bedrock returns a throttling/quota error."""
     pass
 
+
+class LLMServiceError(Exception):
+    """Raised when all LLM providers fail."""
+    pass
+
+
 # Load medical guidelines from local JSON files (no OpenSearch needed for prototype)
 GUIDELINES_DIR = Path(__file__).parent.parent / "knowledge_base" / "guidelines"
 _GUIDELINES_CACHE = None
+_gemini_client = None
 
 
 def _load_local_guidelines() -> str:
@@ -60,6 +67,56 @@ def _load_local_guidelines() -> str:
         return "Medical guidelines not available. Use general medical knowledge."
 
 
+# ── Gemini client ───────────────────────────────────────────────────────────
+
+def _get_gemini_client() -> genai.Client:
+    global _gemini_client
+    if _gemini_client is None:
+        _gemini_client = genai.Client(api_key=settings.gemini_api_key)
+    return _gemini_client
+
+
+def _invoke_gemini(system_prompt: str, messages: list, max_tokens: int = 1024) -> str:
+    """Call Google Gemini and return the response text.
+    
+    Converts Bedrock message format [{role, content: [{text}]}] to Gemini format.
+    Gemini 2.5 Flash is a thinking model — thinking tokens count against
+    max_output_tokens, so we need a higher budget than Bedrock.
+    """
+    client = _get_gemini_client()
+
+    # Convert Bedrock-style messages to Gemini contents
+    contents = []
+    for msg in messages:
+        role = "user" if msg["role"] == "user" else "model"
+        text_parts = []
+        for part in msg.get("content", []):
+            if isinstance(part, dict) and "text" in part:
+                text_parts.append(part["text"])
+            elif isinstance(part, str):
+                text_parts.append(part)
+        contents.append({"role": role, "parts": [{"text": t} for t in text_parts]})
+
+    # Gemini thinking model needs extra budget for reasoning tokens
+    gemini_max_tokens = max(max_tokens * 4, 4096)
+
+    response = client.models.generate_content(
+        model=settings.gemini_model_id,
+        contents=contents,
+        config={
+            "system_instruction": system_prompt,
+            "max_output_tokens": gemini_max_tokens,
+            "temperature": 0.3,
+            "top_p": 0.9,
+        },
+    )
+    if response.text is None:
+        raise RuntimeError("Gemini returned empty response (thinking tokens may have exhausted budget)")
+    return response.text
+
+
+# ── Bedrock client ──────────────────────────────────────────────────────────
+
 def _get_bedrock_client():
     return boto3.client(
         "bedrock-runtime",
@@ -80,31 +137,64 @@ def _get_bedrock_agent_client():
     )
 
 
-def _invoke_model(system_prompt: str, messages: list, max_tokens: int = 1024) -> str:
-    """Call Amazon Nova Pro via Bedrock Converse API and return the response text."""
+def _invoke_bedrock(system_prompt: str, messages: list, max_tokens: int = 1024) -> str:
+    """Call Amazon Bedrock Converse API and return the response text."""
     client = _get_bedrock_client()
 
-    try:
-        response = client.converse(
-            modelId=settings.bedrock_model_id,
-            system=[{"text": system_prompt}],
-            messages=messages,
-            inferenceConfig={
-                "maxTokens": max_tokens,
-                "temperature": 0.3,
-                "topP": 0.9,
-            },
-        )
-        return response["output"]["message"]["content"][0]["text"]
-    except ClientError as e:
-        error_code = e.response["Error"]["Code"]
-        if error_code in ("ThrottlingException", "TooManyRequestsException", "ServiceQuotaExceededException"):
-            logger.warning(f"Bedrock throttled: {e}")
-            raise BedrockThrottlingError(
-                "Daily usage limit reached for AI service. Please try again later or contact your administrator."
-            ) from e
-        logger.error(f"Bedrock ClientError: {e}")
-        raise
+    response = client.converse(
+        modelId=settings.bedrock_model_id,
+        system=[{"text": system_prompt}],
+        messages=messages,
+        inferenceConfig={
+            "maxTokens": max_tokens,
+            "temperature": 0.3,
+            "topP": 0.9,
+        },
+    )
+    return response["output"]["message"]["content"][0]["text"]
+
+
+# ── Unified model invocation with fallback ──────────────────────────────────
+
+def _invoke_model(system_prompt: str, messages: list, max_tokens: int = 1024) -> str:
+    """Invoke the configured LLM provider with automatic fallback."""
+    primary = settings.llm_provider.lower()
+
+    if primary == "gemini":
+        providers = [
+            ("gemini", _invoke_gemini),
+            ("bedrock", _invoke_bedrock),
+        ]
+    else:
+        providers = [
+            ("bedrock", _invoke_bedrock),
+            ("gemini", _invoke_gemini),
+        ]
+
+    last_error = None
+    for name, invoke_fn in providers:
+        try:
+            result = invoke_fn(system_prompt, messages, max_tokens)
+            logger.info(f"LLM response from {name}")
+            return result
+        except ClientError as e:
+            error_code = e.response["Error"]["Code"]
+            if error_code in ("ThrottlingException", "TooManyRequestsException", "ServiceQuotaExceededException"):
+                logger.warning(f"{name} throttled: {e}")
+                last_error = e
+                continue
+            logger.error(f"{name} ClientError: {e}")
+            last_error = e
+            continue
+        except Exception as e:
+            logger.warning(f"{name} failed: {e}")
+            last_error = e
+            continue
+
+    # All providers failed
+    raise LLMServiceError(
+        "All AI providers are currently unavailable. Please try again later."
+    ) from last_error
 
 
 def retrieve_guidelines_from_rag(query: str, num_results: int = 5) -> str:

@@ -14,7 +14,7 @@ from models.assessment import (
     AudioInputRequest, MaternalRiskRequest, MaternalRiskResponse,
 )
 from services import bedrock_service, dynamo_service, transcribe_service, translate_service, polly_service
-from services.bedrock_service import BedrockThrottlingError
+from services.bedrock_service import BedrockThrottlingError, LLMServiceError
 from routers.auth import get_current_user
 
 logger = logging.getLogger(__name__)
@@ -102,6 +102,8 @@ def process_text_input(req: TextInputRequest, current_user: dict = Depends(get_c
             emergency_info = bedrock_service.detect_emergency(req.text_input)
         except BedrockThrottlingError as e:
             raise HTTPException(status_code=429, detail=str(e))
+        except LLMServiceError as e:
+            raise HTTPException(status_code=503, detail=str(e))
         if emergency_info.get("is_emergency"):
             return _handle_emergency(session, emergency_info, language, current_user)
 
@@ -125,6 +127,8 @@ def process_text_input(req: TextInputRequest, current_user: dict = Depends(get_c
         )
     except BedrockThrottlingError as e:
         raise HTTPException(status_code=429, detail=str(e))
+    except LLMServiceError as e:
+        raise HTTPException(status_code=503, detail=str(e))
 
     # Update conversation history
     history.append({"role": "user", "content": [{"text": english_input}]})
@@ -203,6 +207,8 @@ def assess_maternal_risk(
         result = bedrock_service.assess_maternal_risk(req.model_dump())
     except BedrockThrottlingError as e:
         raise HTTPException(status_code=429, detail=str(e))
+    except LLMServiceError as e:
+        raise HTTPException(status_code=503, detail=str(e))
     assessment_id = f"A{uuid.uuid4().hex[:12].upper()}"
     now = datetime.now(timezone.utc).isoformat()
 
@@ -313,6 +319,8 @@ def _finalize_assessment(session: dict, patient: dict, language: str, current_us
         )
     except BedrockThrottlingError as e:
         raise HTTPException(status_code=429, detail=str(e))
+    except LLMServiceError as e:
+        raise HTTPException(status_code=503, detail=str(e))
     ai_resp["is_complete"] = True
     _save_assessment(ai_resp, session, patient, current_user)
 
