@@ -2,10 +2,11 @@
 LLM service — Google Gemini (primary) + Amazon Bedrock (fallback).
 """
 import json
+import re
 import boto3
 import logging
 from pathlib import Path
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from botocore.exceptions import ClientError
 from google import genai
 
@@ -65,6 +66,51 @@ def _load_local_guidelines() -> str:
     except Exception as e:
         logger.error(f"Error loading local guidelines: {e}")
         return "Medical guidelines not available. Use general medical knowledge."
+
+
+def _parse_llm_json(raw: str) -> Optional[dict]:
+    """Robustly extract JSON from LLM response, handling common quirks.
+
+    Handles:
+    - Direct JSON
+    - Markdown code blocks (```json ... ``` or ``` ... ```)
+    - Leading/trailing text around JSON
+    - Broken unicode escapes (e.g. \\u093र produced by Gemini for Hindi)
+    """
+    attempts = []
+
+    # Strip markdown code fences
+    text = raw
+    if "```json" in text:
+        text = text.split("```json", 1)[1].split("```", 1)[0].strip()
+    elif "```" in text:
+        parts = text.split("```")
+        if len(parts) >= 3:
+            text = parts[1].strip()
+
+    attempts.append(text)
+
+    # Also try extracting the outermost { ... }
+    start = text.find("{")
+    end = text.rfind("}")
+    if start >= 0 and end > start:
+        attempts.append(text[start : end + 1])
+
+    # Try each candidate, then retry with broken-unicode fix
+    for candidate in list(attempts):
+        try:
+            return json.loads(candidate)
+        except (json.JSONDecodeError, ValueError):
+            pass
+
+        # Fix broken unicode escapes: \u093र → र  (non-hex char after partial escape)
+        fixed = re.sub(r"\\u[0-9a-fA-F]{0,3}(?=[^\x00-\x7F])", "", candidate)
+        try:
+            return json.loads(fixed)
+        except (json.JSONDecodeError, ValueError):
+            pass
+
+    return None
 
 
 # ── Gemini client ───────────────────────────────────────────────────────────
@@ -271,23 +317,18 @@ def process_assessment_turn(
 
     raw = _invoke_model(full_system_prompt, messages, max_tokens=1024)
 
-    # Parse JSON from Claude's response
-    try:
-        # Claude sometimes wraps JSON in ```json ... ```
-        if "```json" in raw:
-            raw = raw.split("```json")[1].split("```")[0].strip()
-        elif "```" in raw:
-            raw = raw.split("```")[1].split("```")[0].strip()
-        return json.loads(raw)
-    except json.JSONDecodeError:
-        logger.error(f"Failed to parse Claude response as JSON: {raw[:500]}")
-        return {
-            "message": raw,
-            "next_question": None,
-            "is_complete": False,
-            "emergency_detected": False,
-            "question_number": len(conversation_history) + 1,
-        }
+    parsed = _parse_llm_json(raw)
+    if parsed is not None:
+        return parsed
+
+    logger.error(f"Failed to parse LLM response as JSON: {raw[:500]}")
+    return {
+        "message": raw,
+        "next_question": None,
+        "is_complete": False,
+        "emergency_detected": False,
+        "question_number": len(conversation_history) + 1,
+    }
 
 
 def assess_maternal_risk(maternal_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -315,13 +356,12 @@ Relevant Guidelines:
     messages = [{"role": "user", "content": [{"text": user_message}]}]
     raw = _invoke_model(MATERNAL_RISK_SYSTEM_PROMPT, messages, max_tokens=1024)
 
-    try:
-        if "```json" in raw:
-            raw = raw.split("```json")[1].split("```")[0].strip()
-        return json.loads(raw)
-    except json.JSONDecodeError:
-        logger.error(f"Maternal risk parse error: {raw[:500]}")
-        return {
+    parsed = _parse_llm_json(raw)
+    if parsed is not None:
+        return parsed
+
+    logger.error(f"Maternal risk parse error: {raw[:500]}")
+    return {
             "overall_score": 50,
             "risk_level": "medium",
             "risk_factors": [],
@@ -339,9 +379,8 @@ def detect_emergency(symptoms_text: str) -> Dict[str, Any]:
     messages = [{"role": "user", "content": [{"text": f"Patient symptoms: {symptoms_text}"}]}]
     raw = _invoke_model(EMERGENCY_DETECTION_PROMPT, messages, max_tokens=512)
 
-    try:
-        if "```json" in raw:
-            raw = raw.split("```json")[1].split("```")[0].strip()
-        return json.loads(raw)
-    except json.JSONDecodeError:
-        return {"is_emergency": False, "emergency_type": None, "immediate_actions": [], "facility_needed": "PHC"}
+    parsed = _parse_llm_json(raw)
+    if parsed is not None:
+        return parsed
+
+    return {"is_emergency": False, "emergency_type": None, "immediate_actions": [], "facility_needed": "PHC"}
